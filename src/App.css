@@ -1,0 +1,801 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  /* Dark, moody default palette */
+  --bg-color: #121212; 
+  --text-color: #d4d4d4; 
+  --card-bg: rgba(25, 25, 25, 0.7);
+  --card-border: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Mono', monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: all 0.8s ease;
+}
+
+/* Lo-fi film grain overlay - slightly heavier to stand out on dark backgrounds */
+.noise-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.06;
+  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  transition: background-color 0.8s ease, color 0.8s ease;
+}
+
+/* Darker, atmospheric themes */
+.theme-default { 
+  --bg-color: #121212; 
+  --text-color: #d4d4d4; 
+  --card-bg: rgba(25, 25, 25, 0.7);
+}
+.theme-happy { 
+  --bg-color: #2a2415; /* Deep muted gold/brown */
+  --text-color: #fce8a1; 
+  --card-bg: rgba(0, 0, 0, 0.5); 
+  --card-border: rgba(252, 232, 161, 0.15); 
+}
+.theme-sad { 
+  --bg-color: #0c1117; /* Very dark navy */
+  --text-color: #8da9c4; 
+  --card-bg: rgba(0, 0, 0, 0.6); 
+  --card-border: rgba(141, 169, 196, 0.1); 
+}
+.theme-angry { 
+  --bg-color: #1a0808; /* Deep blood red/black */
+  --text-color: #ff8a8a; 
+  --card-bg: rgba(0, 0, 0, 0.7); 
+  --card-border: rgba(255, 138, 138, 0.15); 
+}
+.theme-relaxed { 
+  --bg-color: #111a13; /* Dark muted forest */
+  --text-color: #a3c2a6; 
+  --card-bg: rgba(0, 0, 0, 0.5); 
+  --card-border: rgba(163, 194, 166, 0.1); 
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  z-index: 1;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  letter-spacing: -1.5px;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+.header p {
+  opacity: 0.5;
+}
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  max-width: 500px;
+  width: 100%;
+  z-index: 1;
+}
+
+.mood-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  backdrop-filter: blur(12px);
+  color: inherit;
+  font-family: inherit;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.mood-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mood-card.active {
+  box-shadow: inset 0 0 0 1px currentColor, 0 8px 32px rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.mood-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.05));
+  opacity: 0.9;
+}
+
+.mood-card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Mini Player Preview */
+.player-preview {
+  margin-top: 3rem;
+  padding: 1rem 2rem;
+  background: var(--card-bg);
+  border-radius: 50px;
+  border: 1px solid var(--card-border);
+  z-index: 1;
+  animation: fadeIn 0.5s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+}
+
+.now-playing {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 0.9rem;
+  opacity: 0.75;
+}
+
+.now-playing p {
+  margin: 0;
+}
+
+.cassette-wheel {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px dashed currentColor;
+  animation: spin 4s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes spin { 
+  100% { transform: rotate(360deg); } 
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- New Track Info Styles --- */
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 250px;
+  justify-content: center;
+}
+
+.track-artwork {
+  width: 45px;
+  height: 45px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  object-fit: cover;
+  border: 1px solid var(--card-border);
+}
+
+.track-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.track-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.track-artist {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+/* --- Playlist Page Styles --- */
+.back-btn {
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--card-border);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  transition: background 0.3s;
+}
+
+.back-btn:hover {
+  background: var(--card-bg);
+}
+
+.playlist-header {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.playlist-header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+
+.song-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+
+.song-card:hover {
+  transform: translateY(-5px);
+}
+
+.song-artwork {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.song-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-details p {
+  margin: 0.3rem 0 0 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* Style the native audio player to blend in slightly better */
+.custom-audio {
+  width: 100%;
+  height: 35px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.custom-audio:hover {
+  opacity: 1;
+}
+
+.loading-state {
+  text-align: center;
+  font-size: 1.2rem;
+  opacity: 0.6;
+  margin-top: 4rem;
+  animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.4; }
+  to { opacity: 0.8; }
+}
+
+.tape-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.tape-item {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.tape-item:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.tape-case {
+  background: var(--card-bg);
+  border: 2px solid;
+  border-radius: 4px;
+  height: 160px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.tape-label {
+  background: #fff;
+  color: #222;
+  padding: 10px;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Space Mono', monospace;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+}
+
+.tape-title {
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.tape-mood {
+  font-size: 0.7rem;
+  opacity: 0.6;
+}
+
+.tape-reels {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.reel {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px dashed var(--text-color);
+  opacity: 0.3;
+  animation: spin 8s linear infinite;
+}
+
+.auth-card {
+  background: var(--card-bg);
+  padding: 40px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.auth-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.input-group input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  color: white;
+  border-radius: 4px;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: #f6eac2;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 15px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  background: #f6eac2;
+}
+
+.input-group {
+  position: relative; /* This allows the toggle to sit inside the box */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  user-select: none; /* Prevents text from being highlighted on click */
+}
+
+.password-toggle:hover {
+  opacity: 1;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0 5px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.heart-btn {
+  color: #ff8a8a;
+}
+
+.add-btn {
+  color: #fff;
+  font-weight: 300;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.icon-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Styling for the Add to Mixtape Menu */
+.playlist-dropdown {
+  position: absolute;
+  bottom: 120%; /* Pops up ABOVE the button */
+  right: 0;
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  min-width: 150px;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+  overflow: hidden;
+}
+
+.dropdown-header {
+  font-size: 0.6rem;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.1);
+  color: #aaa;
+  letter-spacing: 1px;
+}
+
+.dropdown-item {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  color: white;
+  cursor: pointer;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f6eac2; /* Matches your vintage aesthetic */
+}
+
+/* --- IDLE AUDIO VISUALIZER --- */
+.idle-visualizer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+  animation: fadeIn 1s ease;
+}
+
+.visualizer-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 80px;
+  gap: 6px;
+}
+
+.bar {
+  width: 10px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  animation: equalize 1.2s infinite ease-in-out;
+}
+
+/* Staggering the animation delays so they don't all bounce together */
+.bar:nth-child(1) { animation-delay: -0.4s; }
+.bar:nth-child(2) { animation-delay: -0.2s; }
+.bar:nth-child(3) { animation-delay: -0.6s; }
+.bar:nth-child(4) { animation-delay: 0s; }
+.bar:nth-child(5) { animation-delay: -0.3s; }
+.bar:nth-child(6) { animation-delay: -0.7s; }
+.bar:nth-child(7) { animation-delay: -0.1s; }
+
+@keyframes equalize {
+  0%, 100% { height: 20px; }
+  50% { height: 80px; }
+}
+
+.idle-text {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  letter-spacing: 4px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+/* --- ADVANCED TERMINAL FOOTER --- */
+.terminal-footer {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 30px;
+  background: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-family: 'Courier New', Courier, monospace; /* Gives it that raw data feel */
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  backdrop-filter: blur(5px);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #4ade80; /* Retro terminal green */
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 10px #4ade80;
+  animation: pulseLight 2s infinite;
+}
+
+@keyframes pulseLight {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+.terminal-data {
+  flex: 1;
+  text-align: center;
+  margin: 0 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 15px;
+  white-space: nowrap;
+}
+
+/* --- 1. THE EDGE-TO-EDGE RESET --- */
+/* Add this at the VERY TOP of App.css to override Vite's defaults */
+:root, body, html {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+}
+
+/* Scrolling Live Broadcast Ticker */
+.ticker-wrap {
+  width: 100%;
+  background: #0a0a0a;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  overflow: hidden;
+  padding: 6px 0;
+  box-sizing: border-box;
+}
+
+.ticker {
+  display: inline-block;
+  white-space: nowrap;
+  padding-right: 100%;
+  animation: ticker 25s linear infinite;
+  font-family: 'Courier New', Courier, monospace;
+  color: #4ade80;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+}
+
+@keyframes ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* Make sure the footer is perfectly flush */
+.terminal-footer {
+  margin-top: auto;
+  width: 100vw;
+  box-sizing: border-box;
+  /* ... keep your existing terminal-footer styles ... */
+  border-radius: 0; 
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  padding: 20px;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.auth-header h1 {
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 2rem;
+}
+
+.auth-header p {
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: #fff;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: #3b82f6;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-submit-btn:hover {
+  background: #2563eb;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.auth-footer a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+/* Container to center everything */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Adjust based on your navbar height */
+  padding-top: 100px; /* Moves it down below the navbar */
+}
+
+/* The box containing the form */
+.auth-card {
+  background: rgba(20, 20, 20, 0.9);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #444;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Force form elements to stack vertically */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Spacing between inputs */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box; /* Crucial so padding doesn't break width */
+  background: #111;
+  border: 1px solid #333;
+  color: white;
+  border-radius: 4px;
+}
+
+.auth-submit-btn {
+  background: white;
+  color: black;
+  padding: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.auth-submit-btn:hover {
+  background: #ccc;
+}
