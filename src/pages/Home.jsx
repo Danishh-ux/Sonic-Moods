@@ -21,11 +21,9 @@ const Home = () => {
     angry: 'heavy metal rock',
     relaxed: 'lofi chill beats',
   };
-
-  // --- CONNECTED TO BACKEND ---
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token) return; // If not logged in, leave stats at 0
+    if (!token) return;
 
     const fetchStats = async () => {
       try {

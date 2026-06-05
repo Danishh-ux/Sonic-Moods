@@ -8,8 +8,6 @@ const Playlists = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   const currentUser = localStorage.getItem('username') || 'Guest';
-
-  // --- CONNECTED TO BACKEND: Fetching Tapes ---
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -37,8 +35,6 @@ const Playlists = () => {
     { id: 'angry', title: 'Static Noise', mood: 'Angry', color: '#ff8a8a' },
     { id: 'relaxed', title: 'Forest Drift', mood: 'Relaxed', color: '#a3c2a6' },
   ];
-
-  // --- CONNECTED TO BACKEND: Creating a Tape ---
   const handleCreatePlaylist = async (e) => {
     e.preventDefault();
     if (!newPlaylistName.trim()) return;
@@ -64,7 +60,7 @@ const Playlists = () => {
 
       if (response.ok) {
         const updatedPlaylists = await response.json();
-        setCustomPlaylists(updatedPlaylists); // Update UI with DB data
+        setCustomPlaylists(updatedPlaylists);
         setNewPlaylistName('');
         setIsCreating(false);
       }

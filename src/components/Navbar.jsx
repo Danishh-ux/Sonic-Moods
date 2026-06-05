@@ -9,7 +9,6 @@ const Navbar = () => {
   const location = useLocation();
   const dropdownRef = useRef(null);
 
-  // 1. The "Memory Reader"
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
@@ -17,11 +16,9 @@ const Navbar = () => {
     } else {
       setUsername('Guest');
     }
-    // Close dropdown whenever the page changes
     setDropdownOpen(false);
   }, [location]);
 
-  // Close dropdown if clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,7 +29,6 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // 2. The Logout Switch
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
@@ -43,27 +39,20 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      {/* Added the container your CSS expects */}
       <div className="navbar-container">
-        
-        {/* ---- Brand ---- */}
         <Link to="/" className="nav-brand" style={{ textDecoration: 'none' }}>
           <span className="brand-icon">📻</span>
           SONIC
         </Link>
-
-        {/* ---- Nav Links ---- */}
-        {/* Changed from divs to a ul list to match your CSS styling */}
         <ul className="nav-links">
           <li><Link to="/">HOME</Link></li>
           <li><Link to="/playlists">PLAYLISTS</Link></li>
           <li><Link to="/liked">LIKED SONGS</Link></li>
+          <li><Link to="/mood-dashboard">MOOD DASHBOARD</Link></li>
         </ul>
 
-        {/* ---- User Area ---- */}
         <div className="nav-user" ref={dropdownRef}>
           {username === 'Guest' ? (
-            // Reused your sleek nav-links style for the login/signup buttons
             <ul className="nav-links" style={{ gap: '1.5rem' }}>
               <li><Link to="/login">LOGIN</Link></li>
               <li><Link to="/signup">SIGN UP</Link></li>
@@ -71,15 +60,11 @@ const Navbar = () => {
           ) : (
             <>
               <span className="user-name">{username}</span>
-              
-              {/* Clicking the avatar toggles the dropdown state */}
               <div 
                 className={`avatar ${dropdownOpen ? 'avatar--open' : ''}`}
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               ></div>
 
-              {/* ---- Profile Dropdown ---- */}
-              {/* This renders the animated dropdown from your CSS */}
               {dropdownOpen && (
                 <div className="profile-dropdown">
                   <div className="dropdown-header">

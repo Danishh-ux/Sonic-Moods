@@ -11,8 +11,6 @@ const Signup = () => {
     password: '',
     confirmPassword: ''
   });
-
-  // State to toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
   
   const navigate = useNavigate();
@@ -57,8 +55,6 @@ const Signup = () => {
               <input name="dob" type="date" required onChange={handleChange} />
             </div>
           </div>
-
-          {/* Password Field with Toggle */}
           <div className="input-group" style={{ position: 'relative' }}>
             <label>Password</label>
             <input 

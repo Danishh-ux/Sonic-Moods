@@ -5,24 +5,22 @@ const LikedSongs = () => {
   const [likedSongs, setLikedSongs] = useState([]);
   const navigate = useNavigate();
 
-  // 1. Grab the VIP Pass from login
   const token = localStorage.getItem('token'); 
   const currentUser = localStorage.getItem('username') || 'Guest';
 
   useEffect(() => {
-    // 2. Fetch directly from your MongoDB Backend!
     const fetchLikesFromDB = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/library/likes', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}` // Showing the Bouncer our pass
+            'Authorization': `Bearer ${token}`
           }
         });
         
         if (response.ok) {
           const data = await response.json();
-          setLikedSongs(data); // Put the DB data into our React state
+          setLikedSongs(data); 
         } else {
           console.error("Failed to fetch likes");
         }
@@ -38,7 +36,6 @@ const LikedSongs = () => {
 
   const removeSong = async (trackId) => {
     try {
-      // 3. Tell the backend to delete it
       const response = await fetch(`http://localhost:5000/api/library/likes/${trackId}`, {
         method: 'DELETE',
         headers: {
@@ -48,14 +45,12 @@ const LikedSongs = () => {
 
       if (response.ok) {
         const updatedSongs = await response.json();
-        setLikedSongs(updatedSongs); // Update screen with the new DB array
+        setLikedSongs(updatedSongs);
       }
     } catch (error) {
       console.error("Error removing song:", error);
     }
   };
-
-  // ... The rest of your return() statement stays EXACTLY the same! ...
 
   return (
     <div className="app-container theme-default" style={{ display: 'block', paddingTop: '100px' }}>

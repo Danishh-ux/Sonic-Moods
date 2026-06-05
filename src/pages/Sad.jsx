@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { saveMood } from './moodStorage';
 import '../App.css';
 
 const Sad = () => {
@@ -9,9 +10,8 @@ const Sad = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const navigate = useNavigate();
 
-  // --- CONNECTED TO BACKEND ---
   useEffect(() => {
-    // 1. Fetch iTunes songs (Melancholy)
+    saveMood('Melancholic'); 
     const fetchSadPlaylist = async () => {
       try {
         const response = await fetch(`https://itunes.apple.com/search?term=melancholy+acoustic+sad&entity=song&limit=20`);
@@ -24,8 +24,6 @@ const Sad = () => {
       }
     };
     fetchSadPlaylist();
-
-    // 2. Fetch the user's custom playlists from MongoDB
     const fetchUserPlaylists = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;

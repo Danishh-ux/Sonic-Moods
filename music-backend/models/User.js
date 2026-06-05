@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const songSchema = new mongoose.Schema({
@@ -9,13 +8,12 @@ const songSchema = new mongoose.Schema({
   previewUrl: { type: String }
 });
 
-// We define what a Custom Playlist looks like
 const playlistSchema = new mongoose.Schema({
-  id: { type: String, required: true }, // Your 'custom-123456' ID
+  id: { type: String, required: true }, 
   title: { type: String, required: true },
   mood: { type: String, default: 'Custom Mix' },
   color: { type: String, default: '#d3d3d3' },
-  songs: [songSchema] // Array of songs inside this playlist
+  songs: [songSchema] 
 });
 
 const userSchema = new mongoose.Schema({
@@ -29,9 +27,14 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date, required: true },
   password: { type: String, required: true },
 
-likedSongs: [songSchema],
+  moodHistory: [{
+    mood: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+  }],
+  likedSongs: [songSchema],
   customPlaylists: [playlistSchema]
 
 }, { timestamps: true });
 
+// 4. Export the Model
 module.exports = mongoose.model('User', userSchema);

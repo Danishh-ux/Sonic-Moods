@@ -22,12 +22,11 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // SAVE THE TOKEN! This is how the app remembers you're logged in
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         
         alert(`Welcome back, ${data.username}`);
-        navigate('/'); // Go to home page
+        navigate('/');
       } else {
         alert(data.message);
       }

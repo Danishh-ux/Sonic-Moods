@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { saveMood } from './moodStorage';
 import '../App.css';
 
 const Happy = () => {
@@ -9,9 +10,8 @@ const Happy = () => {
   const [openDropdownId, setOpenDropdownId] = useState(null);
   const navigate = useNavigate();
 
-  // --- CONNECTED TO BACKEND ---
   useEffect(() => {
-    // 1. Fetch the iTunes songs
+    saveMood('Happy');
     const fetchHappyPlaylist = async () => {
       try {
         const response = await fetch(`https://itunes.apple.com/search?term=feel+good+upbeat+pop&entity=song&limit=50`);
@@ -24,8 +24,6 @@ const Happy = () => {
       }
     };
     fetchHappyPlaylist();
-
-    // 2. Fetch the user's custom playlists from MongoDB
     const fetchUserPlaylists = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;

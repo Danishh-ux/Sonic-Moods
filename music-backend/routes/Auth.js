@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // ← Added this for login tokens
+const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 
-// ==========================================
-// 1. SIGNUP ROUTE (Your perfectly working code)
-// ==========================================
 router.post('/signup', async (req, res) => {
   try {
     const { fullName, username, dob, password, confirmPassword } = req.body;
@@ -38,34 +35,26 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// ==========================================
-// 2. LOGIN ROUTE (The missing piece!)
-// ==========================================
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // 1. Check if user exists
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
-    // 2. Compare the typed password with the scrambled database password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials." });
     }
 
-    // 3. Create a secure token (Session Pass)
-    // It uses your .env JWT_SECRET, or a fallback string if you haven't set one yet
     const token = jwt.sign(
       { userId: user._id }, 
       process.env.JWT_SECRET || 'super_secret_melancholy_key', 
-      { expiresIn: '7d' } // Token expires in 7 days
+      { expiresIn: '7d' }
     );
 
-    // 4. Send the VIP pass back to React
     res.status(200).json({ 
       message: "Login successful", 
       token, 
