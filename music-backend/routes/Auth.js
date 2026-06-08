@@ -4,6 +4,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 
+const validatePassword = (password) => {
+  const minLength = password.length >= 8;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  return minLength && hasUpper && hasSpecial;
+};
+
 router.post('/signup', async (req, res) => {
   try {
     const { fullName, username, dob, password, confirmPassword } = req.body;
@@ -14,6 +21,12 @@ router.post('/signup', async (req, res) => {
 
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match." });
+    }
+
+    if (!validatePassword(password)) {
+      return res.status(400).json({ 
+        message: "Security Error: Password must be at least 8 characters long, contain at least 1 capital letter, and 1 special character." 
+      });
     }
 
     const existingUser = await User.findOne({ username });

@@ -22,8 +22,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
+        // Updated to use sessionStorage so it clears when the tab is closed
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('username', data.username);
         
         alert(`Welcome back, ${data.username}`);
         navigate('/');

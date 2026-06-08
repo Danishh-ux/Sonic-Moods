@@ -11,7 +11,8 @@ const PlaylistView = () => {
   const [newColor, setNewColor] = useState("#d3d3d3");
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    // UPDATED to sessionStorage
+    const token = sessionStorage.getItem('token');
     if (!token) return navigate('/login');
 
     const fetchSpecificPlaylist = async () => {
@@ -38,7 +39,7 @@ const PlaylistView = () => {
   }, [id, navigate]);
 
   const handleRemoveSong = async (trackId) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       const response = await fetch(`http://localhost:5000/api/library/playlists/${id}/songs/${trackId}`, {
         method: 'DELETE',
@@ -55,7 +56,7 @@ const PlaylistView = () => {
   };
 
   const handlePatchTitle = async () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       const response = await fetch(`http://localhost:5000/api/library/playlists/${id}`, {
         method: "PATCH",
@@ -77,7 +78,7 @@ const PlaylistView = () => {
   };
 
   const handlePutReplace = async () => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       const fullUpdatedPlaylist = {
         ...playlist,
@@ -104,11 +105,12 @@ const PlaylistView = () => {
       console.error("Error replacing playlist:", error);
     }
   };
+
   const handleDeletePlaylist = async () => {
     const confirmErase = window.confirm("CRITICAL WARNING: Are you sure you want to permanently erase this tape? This cannot be undone.");
     if (!confirmErase) return;
 
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     try {
       const response = await fetch(`http://localhost:5000/api/library/playlists/${id}`, {
         method: 'DELETE',
@@ -133,6 +135,7 @@ const PlaylistView = () => {
       </div>
     );
   }
+  
   const activeColor = isEditing ? newColor : (playlist.color || "#d3d3d3");
 
   return (

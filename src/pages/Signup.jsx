@@ -19,14 +19,29 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const validatePassword = (password) => {
+    const minLength = password.length >= 8;
+    const hasUpper = /[A-Z]/.test(password);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    
+    return minLength && hasUpper && hasSpecial;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validatePassword(formData.password)) {
+      alert("Security Error: Password must be at least 8 characters long, contain at least 1 capital letter, and 1 special character.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      alert("Security Error: Passwords do not match.");
       return;
     }
     console.log("Account Data for DB:", formData);
-    alert(`Account created for ${formData.fullName}!`);
+
+    alert(`Account initialized for ${formData.fullName}. Signal ready.`);
     navigate('/');
   };
 
@@ -55,6 +70,7 @@ const Signup = () => {
               <input name="dob" type="date" required onChange={handleChange} />
             </div>
           </div>
+          
           <div className="input-group" style={{ position: 'relative' }}>
             <label>Password</label>
             <input 
@@ -70,6 +86,9 @@ const Signup = () => {
             >
               {showPassword ? "HIDE" : "SHOW"}
             </span>
+            <small style={{ display: 'block', marginTop: '5px', opacity: 0.6, fontSize: '0.75rem' }}>
+              Min 8 chars, 1 uppercase, 1 special character.
+            </small>
           </div>
 
          <div className="input-group" style={{ position: 'relative' }}>

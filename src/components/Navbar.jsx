@@ -9,13 +9,19 @@ const Navbar = () => {
   const location = useLocation();
   const dropdownRef = useRef(null);
 
+
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
+    const token = sessionStorage.getItem('token');
+    const storedUsername = sessionStorage.getItem('username');
+
+    if (token && storedUsername) {
       setUsername(storedUsername);
     } else {
       setUsername('Guest');
+      sessionStorage.removeItem('username');
+      sessionStorage.removeItem('token');
     }
+    
     setDropdownOpen(false);
   }, [location]);
 
@@ -30,8 +36,8 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('username');
     setUsername('Guest');
     setDropdownOpen(false);
     navigate('/login');

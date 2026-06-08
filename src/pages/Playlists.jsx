@@ -7,9 +7,12 @@ const Playlists = () => {
   const [newPlaylistName, setNewPlaylistName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
-  const currentUser = localStorage.getItem('username') || 'Guest';
+  // UPDATED: Look in sessionStorage
+  const currentUser = sessionStorage.getItem('username') || 'Guest';
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    // UPDATED: Look in sessionStorage
+    const token = sessionStorage.getItem('token');
     if (!token) return;
 
     const fetchPlaylists = async () => {
@@ -35,11 +38,20 @@ const Playlists = () => {
     { id: 'angry', title: 'Static Noise', mood: 'Angry', color: '#ff8a8a' },
     { id: 'relaxed', title: 'Forest Drift', mood: 'Relaxed', color: '#a3c2a6' },
   ];
+
   const handleCreatePlaylist = async (e) => {
     e.preventDefault();
     if (!newPlaylistName.trim()) return;
 
-    const token = localStorage.getItem('token');
+    // UPDATED: Look in sessionStorage
+    const token = sessionStorage.getItem('token');
+    
+    // THE FIX: If no token exists, boot them to the login page
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     const newPlaylist = {
       id: `custom-${Date.now()}`,
       title: newPlaylistName,
@@ -66,6 +78,16 @@ const Playlists = () => {
       }
     } catch (error) {
       console.error("Error creating playlist:", error);
+    }
+  };
+
+  // Optional UX Fix: Also prevent them from opening the "Blank Tape" input if not logged in
+  const handleToggleCreate = () => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    } else {
+      setIsCreating(!isCreating);
     }
   };
 
@@ -101,7 +123,7 @@ const Playlists = () => {
         <button 
           className="auth-btn" 
           style={{ width: 'auto', padding: '8px 15px', fontSize: '0.8rem' }}
-          onClick={() => setIsCreating(!isCreating)}
+          onClick={handleToggleCreate}
         >
           {isCreating ? 'CANCEL' : '+ BLANK TAPE'}
         </button>

@@ -1,5 +1,3 @@
-// src/pages/moodStorage.js
-
 const MOOD_HISTORY_KEY = 'sonic_mood_history';
 
 export const saveMood = async (moodName) => {
