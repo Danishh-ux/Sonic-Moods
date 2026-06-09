@@ -10,7 +10,7 @@ app.use(express.json());
 
 app.use('/api/library', LibraryRoutes);
 
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/Auth');
 app.use('/api/auth', authRoutes);
 
 mongoose.connect(process.env.MONGO_URI)

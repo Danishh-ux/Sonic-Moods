@@ -7,16 +7,14 @@ import Sad from './pages/Sad';
 import Angry from './pages/Angry';
 import Relaxed from './pages/Relaxed';
 import Playlists from './pages/Playlists';
-import LikedSongs from './pages/LikedSongs';
-import PlaylistView from './pages/PlaylistView';
+import Likedsongs from './pages/Likedsongs';
+import Playlistview from './pages/Playlistview';
 import Profile from "./pages/Profile";
 import MoodDashboard from './pages/Mooddashboard';
 
 
-// Choose ONE location for Signup. 
-// If you put it in components, use this:
 import Signup from './components/Signup'; 
-import Login from './components/Login'; // Add this for the next step!
+import Login from './components/Login';
 
 import './App.css';
 
@@ -33,13 +31,13 @@ const App = () => {
         <Route path="/relaxed" element={<Relaxed />} />
         <Route path="/playlists" element={<Playlists />} />
         
-        <Route path="/playlist/:id" element={<PlaylistView />} />
+        <Route path="/playlist/:id" element={<Playlistview/>} />
         
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/mood-dashboard" element={<MoodDashboard />} />
-        <Route path="/liked" element={<LikedSongs />} />
+        <Route path="/liked" element={<Likedsongs />} />
       </Routes>
     </Router>
   );

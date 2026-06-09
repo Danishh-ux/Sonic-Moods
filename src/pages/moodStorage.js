@@ -1,7 +1,7 @@
 const MOOD_HISTORY_KEY = 'sonic_mood_history';
 
 export const saveMood = async (moodName) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   if (token) {
     try {
@@ -23,8 +23,9 @@ export const saveMood = async (moodName) => {
     localStorage.setItem(MOOD_HISTORY_KEY, JSON.stringify(updatedHistory));
   }
 };
+
 export const fetchMoodHistory = async () => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   if (token) {
     try {
