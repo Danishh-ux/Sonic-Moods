@@ -14,7 +14,7 @@ const Sad = () => {
     saveMood('Melancholic'); 
     const fetchSadPlaylist = async () => {
       try {
-        const response = await fetch(`https://itunes.apple.com/search?term=melancholy+acoustic+sad&entity=song&limit=20`);
+        const response = await fetch(`https://itunes.apple.com/search?term=melancholy+acoustic+sad&entity=song&limit=50`);
         const data = await response.json();
         setSongs(data.results);
       } catch (error) {

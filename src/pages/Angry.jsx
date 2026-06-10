@@ -14,7 +14,7 @@ const Angry = () => {
     saveMood('Angry');
     const fetchAngryPlaylist = async () => {
       try {
-        const response = await fetch(`https://itunes.apple.com/search?term=industrial+rock+metal+grunge&entity=song&limit=20`);
+        const response = await fetch(`https://itunes.apple.com/search?term=industrial+rock+metal+grunge&entity=song&limit=50`);
         const data = await response.json();
         setSongs(data.results);
       } catch (error) {

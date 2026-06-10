@@ -14,7 +14,7 @@ const Relaxed = () => {
 
     const fetchRelaxedPlaylist = async () => {
       try {
-        const response = await fetch(`https://itunes.apple.com/search?term=lofi+chill+beats+ambient&entity=song&limit=20`);
+        const response = await fetch(`https://itunes.apple.com/search?term=lofi+chill+beats+ambient&entity=song&limit=50`);
         const data = await response.json();
         setSongs(data.results);
       } catch (error) {
