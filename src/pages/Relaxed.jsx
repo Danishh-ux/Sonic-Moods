@@ -25,7 +25,7 @@ const Relaxed = () => {
     };
     fetchRelaxedPlaylist();
     const fetchUserPlaylists = async () => {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (!token) return;
 
       try {
@@ -44,7 +44,7 @@ const Relaxed = () => {
   }, []);
 
   const handleLike = async (song) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return alert("Please log in to save frequencies.");
 
     try {
@@ -69,7 +69,7 @@ const Relaxed = () => {
   };
 
   const handleAddToPlaylist = async (playlistId, song) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (!token) return alert("Please log in first.");
 
     try {
