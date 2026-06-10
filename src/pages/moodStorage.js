@@ -1,5 +1,24 @@
 const MOOD_HISTORY_KEY = 'sonic_mood_history';
 
+export const clearMoodHistory = async () => {
+  const token = sessionStorage.getItem('token');
+
+  if (token) {
+    try {
+      await fetch('http://localhost:5000/api/library/moods', {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      console.error('Failed to clear moods from server:', error);
+    }
+  }
+
+  localStorage.removeItem(MOOD_HISTORY_KEY);
+};
+
 export const saveMood = async (moodName) => {
   const token = sessionStorage.getItem('token');
 
